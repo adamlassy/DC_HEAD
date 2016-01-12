@@ -1,0 +1,62 @@
+<!DOCTYPE html> 
+<html> 
+<body> 
+
+<div style="text-align:center"> 
+  <button onclick="playPause()">Play/Pause</button> 
+  <button onclick="next()">Next ></button>
+  <br><br>
+
+  <video id="v1" width="1280" >
+    <source src="v1.mp4" type="video/mp4">
+  </video>
+
+  <video id="v2" width="1280" style="display:none">
+    <source src="v2.mp4" type="video/mp4">
+  </video>
+
+  <video id="v3" width="1280" style="display:none" >
+    <source src="v3.mp4" type="video/mp4">
+  </video>
+
+  <video id="v4" width="1280" style="display:none">
+    <source src="v1.mp4" type="video/mp4">
+  </video>
+
+  <video id="v5" width="1280" style="display:none">
+    <source src="v2.mp4" type="video/mp4">
+  </video>
+
+  <video id="v6" width="1280" style="display:none">
+    <source src="v3.mp4" type="video/mp4">
+  </video>
+
+</div> 
+
+<script> 
+var myVideo = document.getElementById("v1"); 
+var index = 1;
+
+function playPause() { 
+    if (myVideo.paused) 
+        myVideo.play(); 
+    else 
+        myVideo.pause(); 
+} 
+
+function next() {
+	myVideo.pause();
+	myVideo.style.display = "none";
+
+	index++;
+
+	if (index > 6) { index= 1;}
+	myVideo = document.getElementById("v"+index);
+	myVideo.style.display = "block";
+	myVideo.play();
+} 
+</script> 
+
+</body> 
+</html>
+
