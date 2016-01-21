@@ -16,107 +16,24 @@ var _state = STATE_WAIT;
 var currentVideo;
 var nextVideo;
 
+var currentElement = "";
+
+var bInit = false;
+
+var arrAnswerType = [
+	"Short",
+	"Long",
+	"Medium",
+	"Interrupt"
+];
+
 var arrState = [
-	"Wait",
-	"Ask",
-	"Listen",
+	"Wait for person",
+	"Prompt person",
+	"Listen to question",
 	"Answer"
 ];
 
-var clipsWait = [
-
-	{
-		type:0,
-		name:"hold_0",
-		src:"videos/wait_1.mp4"
-	},
-	{
-		type:0,
-		name:"hold_1",
-		src:"videos/wait_1.mp4"
-	}
-];
-
-var clipsAsk = [
-	{
-		type:1,
-		name:"ask_0",
-		src:"videos/ask_0.mp4"
-	},
-	{
-		type:1,
-		name:"ask_1",
-		src:"videos/ask_1.mp4"
-	},
-	{
-		type:1,
-		name:"ask_2",
-		src:"videos/ask_2.mp4"
-	},
-	{
-		type:1,
-		name:"ask_3",
-		src:"videos/ask_3.mp4"
-	},
-	{
-		type:1,
-		name:"ask_4",
-		src:"videos/ask_4.mp4"
-	}
-];
-
-var clipsAnswer = [
-/*
-	{
-		type: 2,
-		name: "answer_0",
-		src: "videos/answer_0.mp4",
-		tags: [
-			"fuck you", "asshole", "shit head", "test", "hello", "bottle"
-		]
-	},
-	{
-		type: 2,
-		name: "answer_1",
-		src: "videos/answer_1.mp4",
-		tags: [
-			"mr show", "mister show", "bob", "hello", "breasts", "boobs"
-		]
-	},
-*/
-	{
-		type: 2,
-		name: "answer_2",
-		src: "videos/answer_2.mp4",
-		tags: [
-			"nudity", "tasteful", "obscene", "family friendly", "david"
-		]
-	},
-	{
-		type: 2,
-		name: "answer_3",
-		src: "videos/answer_3.mp4",
-		tags: [
-			"truck", "motorcycle"
-		]
-	},
-	{
-		type: 2,
-		name: "answer_4",
-		src: "videos/answer_4.mp4",
-		tags: [
-			"cats", "dogs", "pets"	
-		] 
-	},
-	{
-		type: 2,
-		name: "answer_5",
-		src: "videos/answer_5.mp4",
-		tags: [
-			"taco bell", "burgerking", "hamburger", "tacos"
-		]
-	}
-];
 
 function endAskVideo(e)
 {
@@ -149,12 +66,31 @@ function drawClip(_index, _obj, _init)
     _style = "inline";
   }
 
+  /*
   if (_type == TYPE_WAIT) {
      	_loop = " loop";
   }
+  */
 
   console.log("element>" + _element);
-  document.write('<video id="' + _element + '"' + _loop + ' style="display:' + _style + '" width="640" height="360"><source src="' + _src + '" type="video/mp4"></video>');
+  console.log("element>" + _src);
+  document.write('<video id="' + _element + '"' + _loop + ' style="display:' + _style + '" height="600"><source src="' + _src + '" type="video/mp4"></video>');
+
+  /*
+  //Dynamically create element
+  var _v = document.createElement("video");
+  var _s = document.createElement("source");
+
+  _v.id = _element;
+  _v.style = "display:" + _style;
+  _v.height = 600;
+  _s.type = "video/mp4";
+  _s.src = _src;
+  _v.appendChild(_s);
+  //_v.preload = "none";
+
+  document.getElementById("videos").appendChild(_v);
+  */
 
   //Add Event Listener
   switch (_type) {
@@ -167,40 +103,46 @@ function drawClip(_index, _obj, _init)
 	document.getElementById(_element).addEventListener('ended',endAnswerVideo,false);
 	break;
   }
-
   document.getElementById(_element).addEventListener('loadeddata',onVideoLoad,false);
+
 }
 
 function initContent()
 {
 	var initVideo = true;
 
-	for (var i=0; i<clipsWait.length; i++)
-	{ drawClip(i,clipsWait[i],initVideo); initVideo=false;}
+	for (var i=0; i<clipsAnswer.length; i++)
+	{ drawClip(i,clipsAnswer[i],initVideo); }
 
 	for (var i=0; i<clipsAsk.length; i++)
 	{ drawClip(i,clipsAsk[i],initVideo);}
 
-	for (var i=0; i<clipsAnswer.length; i++)
-	{ drawClip(i,clipsAnswer[i],initVideo); }
+	for (var i=0; i<clipsWait.length; i++)
+	{ drawClip(i,clipsWait[i],initVideo); initVideo=false;}
 }
 
-function swapVideo(_element)
+function swapVideo(_element, _loop)
 {
-	console.log(_element);
-
-	nextVideo = document.getElementById(_element); // "v_0_0");
-	nextVideo.play();
-        nextVideo.style.display = "inline";
-
-	currentVideo.pause();
-        currentVideo.style.display = "none";
-
-	currentVideo = nextVideo;	
+	console.log(_element + " looping : " + _loop);
+	if (_element != currentElement)
+	{
+		nextVideo = document.getElementById(_element); // "v_0_0");
+		nextVideo.loop = _loop;
+		nextVideo.muted = _loop;
+		//nextVideo.currentTime = 0;
+		nextVideo.play();
+        	nextVideo.style.display = "inline";
+        	currentVideo.style.display = "none";
+		currentVideo.pause();
+		currentVideo = nextVideo;
+		currentElement = _element;
+	}
 }
 
 function initState()
 {
+	bInit = true;
+
 	console.log("INIT VIDEO");
 
 	state = STATE_WAIT;
@@ -208,13 +150,15 @@ function initState()
 	
 	currentVideo = document.getElementById("v_0_0");
 	currentVideo.play();
+	currentVideo.loop = true;
+	currentVideo.muted = true;
         currentVideo.style.display = "inline";
 }
 
 //Listen loop to change state
 function listenLoop()
 {
-	console.log("Looping");
+	//console.log("Looping");
 
 	setTimeout(function () {
 
@@ -235,31 +179,40 @@ function listenLoop()
 		//IF WE HAVENT
 		}  else {
 
-			console.log("NOT init");
+			//console.log("NOT init");
 			if (Date.now() - START_LISTEN_TIMESTAMP > SILENCE_TIMEOUT) {
+				console.log("NO TALK")
 				setState(STATE_WAIT);
 			} else {
 				listenLoop();
 			}
 		}
-	}, 1000);
+	}, 100);
 }
 
 function findAnswer()
 {
+
+	_selectedIndex = Math.floor(Math.random()*(clipsAnswer.length));
+
+/*
 	arrRank = [];
 
-	_tags = "";
+	_allTags = "";
 	_out = (final_transcript + "  " + interim_transcript).toLowerCase();
 
 	console.log("Out > " + _out);
+
+	_selectedIndex = -1;
+	_selectedTagCount = 0;
 
 	//Index all the clips
 	for (i=0; i<clipsAnswer.length; i++)
 	{
 		//Increment the rank of each Answer when we find Key words
 		arrRank[i] = 0;
-		_tags += "<div>" + clipsAnswer[i].name + " : ";
+		_tags = "";
+		_tagCount = 0;
 
 		console.log("c>" + clipsAnswer[i].tags);
 		for (j=0; j<clipsAnswer[i].tags.length; j++)
@@ -268,29 +221,39 @@ function findAnswer()
 			console.log("a>" + _tag);
 			if (_out.indexOf(_tag) >= 0) {
 				console.log("find");
-				_tags += _tag + " ";
-				arrRank[i]++;
+				_tags += _tag + ", ";
+				_tagCount++;
+				console.log("tag count : " + _tagCount);
 			}
 		}
-		_tags += "</div>";
+
+		if (_tagCount > 0) {
+
+			console.log("found");
+
+			if (_tagCount > _selectedTagCount) {
+				console.log("new find");
+				_selectedIndex = i;
+				_selectedTagCount = _tagCount;
+			}
+				console.log("new selected index: " + _selectedIndex);
+			_allTags += "<div>" + clipsAnswer[i].name + " : " + _tags;
+		}
+	}
+
+	if (_selectedIndex == -1) {
+		_selectedIndex = 0; //Math.floor(Math.random()*(clipsAnswer.length+1));
 	}
 
 	//Sort Ranks
-	if (arrRank.length > 0) {
-		highVal = 0;
-		highIndex = 0;
-		for (i=0; i<arrRank.length; i++)
-		{
-			
-		}
+  	document.getElementById('tags').innerHTML = _allTags;
+  	document.getElementById('answer').innerHTML = clipsAnswer[_selectedIndex].name;
 
-	} else {
-		//No tagged files
-	}
-
-
-  	document.getElementById('tags').innerHTML = _tags;
 	console.log("Find answer : " + _out);
+
+*/
+
+	return _selectedIndex;
 }
 
 
@@ -302,11 +265,15 @@ function setState(_stateID)
 	switch (state) {
 
     		case STATE_WAIT:
+
 			//STOP LISTENING
 			stopButton();
+  			document.getElementById('tags').innerHTML = "";
+  			document.getElementById('answer').innerHTML = "";
 
 			_element = "v_" + TYPE_WAIT + "_" + waitIndex;
-			swapVideo(_element);
+console.log("* SET WAIT VIDEO : " + _element);
+			swapVideo(_element,true);
 			waitIndex = incIndex(waitIndex,clipsWait.length);
 
 			clearInput();
@@ -315,7 +282,7 @@ function setState(_stateID)
 
     		case STATE_ASK:
 			_element = "v_" + TYPE_ASK + "_" + askIndex;
-			swapVideo(_element);
+			swapVideo(_element,false);
 			askIndex = incIndex(askIndex,clipsAsk.length);
 			break;
 
@@ -324,7 +291,7 @@ function setState(_stateID)
 			listenLoop();
 
 			_element = "v_" + TYPE_WAIT + "_" + waitIndex;
-			swapVideo(_element);
+			swapVideo(_element,true);
 			waitIndex = incIndex(waitIndex,clipsWait.length);
 
 			//Start google listen
@@ -334,10 +301,10 @@ function setState(_stateID)
     		case STATE_ANSWER:
 			
 			//Get Keywords and find answer
-			findAnswer();
+			_answerIndex = findAnswer();
 
-			_element = "v_" + TYPE_ANSWER + "_" + answerIndex;
-			swapVideo(_element);
+			_element = "v_" + TYPE_ANSWER + "_" + _answerIndex;
+			swapVideo(_element,false);
 			answerIndex = incIndex(answerIndex,clipsAnswer.length);
 
 			//STOP LISTENING
@@ -365,7 +332,13 @@ window.onkeydown = function(e) {
    console.log(key);
 
    if (key == 65) {
-        initState(STATE_WAIT);
+
+	if (bInit) {
+          setState(STATE_WAIT);
+	} else {
+          initState(STATE_WAIT);
+	}
+
    } else if (key == 66) {
         setState(STATE_WAIT);
    } else if (state == STATE_WAIT) {

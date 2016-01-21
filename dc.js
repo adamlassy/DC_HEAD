@@ -142,7 +142,7 @@ function stopButton()
 function showInfo(s) {
 
   console.log("R>" + s);
-  document.getElementById('info').innerHTML = s;
+  //document.getElementById('info').innerHTML = s;
 }
 
 //VIDEO CONTROLS

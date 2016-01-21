@@ -3,11 +3,12 @@
   <head>
 
     <style>
-
-	body {padding:0; margin:0; font-family:arial,helvetica,clean,terminal,sans-serif; font-size:9px; line-height:13px; color:#000000;border:0px;}
+	html {overflow-y: hidden; }
+	body {overflow-y: hidden; padding:0; margin:0; font-family:arial,helvetica,clean,terminal,sans-serif; font-size:9px; line-height:13px; color:#000000;border:0px;}
 
 	#main {
 		position:relative;
+		height:700px;
 	}
 	
     	#results {
@@ -20,7 +21,8 @@
     	}
 
     	#tags {
-    		color: #00ffff;
+		padding-left:20px;
+    		color: #0000ff;
     	}
 
     	#final_span {
@@ -28,11 +30,15 @@
     		padding-right: 3px;
     	}
 
+	#videos {
+		padding-left:10px;
+		overflow:hidden;
+	}
+
 	#content_block {
 		background-color: rgba(255,255,255,0.5);
-		width: 500px;
-		position:absolute;
-    		color: #000000;
+		position:relative;
+    		color: #333333;
 		font-size: 18px;
 		top:10px;
 		left:10px;
@@ -82,51 +88,34 @@ var SILENCE_TIMEOUT = 8000;
 var two_line = /\n\n/g;
 var one_line = /\n/g;
 
-/*
-window.onkeydown = function(e) {
-
-   var key = e.keyCode ? e.keyCode : e.which;
-
-   console.log("KEY");
-   console.log(key);
-
-   if (key == 65) {
-	initState(STATE_WAIT);
-   } else if (state == STATE_WAIT) {
-	setState(STATE_ASK);
-   }
-
-   //startButton(e);
-}
-*/
     </script>
 
     <script src="dc.js"></script>
+    <script src="videos.js"></script>
     <script src="content.js"></script>
 
     <script src="//www.google.com/intl/en/chrome/assets/common/js/chrome.min.js"></script>
 
   </head>
 
-  <body>
+  <body style="overflow-y:hidden">
   <div id="main">
 
-  <script>
-	initContent();	
-  </script>
-
   <div id="content_block">
-  	<div>Google Info: <span id="info"></span></div>
-	<div>State: <span id="state"></span></div>
-	<div>Video: <span id="videoTitle"></span></div>
-  	<div>Question Asked: <span id="final_span"></span><span id="interim_span"></span></div>
-  	<div>Tags: <span id="tags"></span></div>
-  	<div>Answer weights: <span id="answer_weight"></span></div>
+  	<!--<div>Google Info: <span id="info"></span></div>-->
+	<div>State: <b><span id="state"></span></b></div>
+  	<div>Question Asked: <b><span id="final_span"></span><span id="interim_span"></span></b></div>
+  	<div>Answer Tag Words: <span id="tags"></span></div>
+  	<div>Selected Answer: <b><span id="answer"></span></b></div>
   </div>
 
+  <div id="videos">
+
   	<script>
-      	//initState(STATE_WAIT);
+	initContent();	
   	</script>
+  </div>
+
   </div>
 
   </body>
