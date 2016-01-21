@@ -18,12 +18,12 @@ if (!('webkitSpeechRecognition' in window)) {
     console.log("on error");
 
     if (event.error == 'no-speech') {
-      start_img.src = '//www.google.com/intl/en/chrome/assets/common/images/content/mic.gif';
+      //start_img.src = '//www.google.com/intl/en/chrome/assets/common/images/content/mic.gif';
       showInfo('info_no_speech');
       ignore_onend = true;
     }
     if (event.error == 'audio-capture') {
-      start_img.src = '//www.google.com/intl/en/chrome/assets/common/images/content/mic.gif';
+      //start_img.src = '//www.google.com/intl/en/chrome/assets/common/images/content/mic.gif';
       showInfo('info_no_microphone');
       ignore_onend = true;
     }
@@ -60,7 +60,10 @@ if (!('webkitSpeechRecognition' in window)) {
 
   recognition.onresult = function(event) {
 
-    //console.log("on result: " + typeof(event.results));
+    console.log("on result: " + typeof(event.results));
+    if (LISTEN_INIT != true) {
+	setState(STATE_LISTEN);
+    }
     LISTEN_INIT = true;
     LAST_TALK_TIMESTAMP = Date.now();
 
@@ -146,6 +149,7 @@ function showInfo(s) {
 }
 
 //VIDEO CONTROLS
+/*
 function playPause() {
     if (myVideo.paused)
         myVideo.play();
@@ -164,3 +168,4 @@ function next() {
         myVideo.style.display = "inline"; //"block";
         myVideo.play();
 }
+*/

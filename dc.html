@@ -53,6 +53,7 @@
            (p.indexOf('Windows NT 6.2') > -1 ? 'win8' : p.indexOf('Windows') > -1 ? 'win' : p.indexOf('Mac') > -1 ? 'mac' : p.indexOf('CrOS') > -1 ? 'cros' : 'linux');
     e.className = e.className.replace(/\bno-js\b/,'js');
   })(document.documentElement, window.navigator.userAgent)
+
     </script>
     <meta charset="utf-8">
     <meta content="initial-scale=1, minimum-scale=1, width=device-width" name="viewport">
@@ -62,14 +63,23 @@
     <title>
       Chrome Browser
     </title>
+
     <link href="//www.google.com/images/icons/product/chrome-32.png" rel="icon" type="image/ico">
     <link href="//fonts.googleapis.com/css?family=Open+Sans:300,400,600,700&amp;subset=latin" rel=
     "stylesheet">
     <link href="https://www.google.com/intl/en/chrome/assets/common/css/chrome.min.css" rel="stylesheet">
+
 </script>
     <style>
 a.c1 {font-weight: normal;}
     </style>
+
+    <script src="//www.google.com/intl/en/chrome/assets/common/js/chrome.min.js"></script>
+    <script src="jquery-2.2.0.min.js"></script>
+
+    <script src="dc.js"></script>
+    <script src="videos.js"></script>
+    <script src="content.js"></script>
 
     <script>
 
@@ -81,40 +91,35 @@ var start_timestamp;
 
 var LAST_TALK_TIMESTAMP;
 var START_LISTEN_TIMESTAMP;
-var LISTEN_INIT = false;
-var QUESTION_TIMEOUT = 2000;
+//var LISTEN_INIT = false;
+var QUESTION_TIMEOUT = 1500;
 var SILENCE_TIMEOUT = 8000;
 
 var two_line = /\n\n/g;
 var one_line = /\n/g;
 
+$( document ).ready(function() {
+	console.log("done");
+	initContent();	
+});
+	console.log("first");
+
     </script>
-
-    <script src="dc.js"></script>
-    <script src="videos.js"></script>
-    <script src="content.js"></script>
-
-    <script src="//www.google.com/intl/en/chrome/assets/common/js/chrome.min.js"></script>
-
   </head>
 
   <body style="overflow-y:hidden">
   <div id="main">
 
   <div id="content_block">
-  	<!--<div>Google Info: <span id="info"></span></div>-->
+  	<!--div>Google Info: <span id="info"></span></div-->
+
 	<div>State: <b><span id="state"></span></b></div>
   	<div>Question Asked: <b><span id="final_span"></span><span id="interim_span"></span></b></div>
   	<div>Answer Tag Words: <span id="tags"></span></div>
   	<div>Selected Answer: <b><span id="answer"></span></b></div>
   </div>
 
-  <div id="videos">
-
-  	<script>
-	initContent();	
-  	</script>
-  </div>
+  <div id="videos"></div>
 
   </div>
 
