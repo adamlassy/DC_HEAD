@@ -124,7 +124,13 @@ var clipsMedium = [
 	{
 		type: 2,
 		name: "answer_0",
-		src: "clips/short/Answer_random.mp4",
+		src: "clips/medium/Not that question.mp4",
+		tags: [] 
+	},
+	{
+		type: 2,
+		name: "answer_0",
+		src: "clips/short/Come back in a minute.mp4",
 		tags: [] 
 	}
 ];

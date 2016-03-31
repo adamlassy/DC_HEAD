@@ -15,7 +15,7 @@ var CONTENT_TYPE_SHORT = 0;
 var CONTENT_TYPE_MEDIUM = 1;
 var CONTENT_TYPE_LONG = 2;
 var CONTENT_TYPE_INTERRUPTING = 3;
-var _currentContentType = CONTENT_TYPE_MEDIUM;
+var _currentContentType = CONTENT_TYPE_LONG;
 
 var STATE_WAIT = 0;
 var STATE_ASK = 1;
@@ -38,7 +38,7 @@ var currentElement = "";
 
 var bInit = false;
 
-var _max = 3;
+var _max = 2;
 var arrMax = [];
 var answerHash = [];
 
